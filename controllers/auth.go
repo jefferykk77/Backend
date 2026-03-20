@@ -57,7 +57,7 @@ func Login(ctx *gin.Context) {
 
 	var user models.User
 
-	if err := global.Db.Where("username = ?", input.Username).First(&user).Error; err != nil {
+	if err := global.Db.Where("Username = ?", input.Username).First(&user).Error; err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Wrong cedentials"})
 		return
 	}
@@ -69,16 +69,6 @@ func Login(ctx *gin.Context) {
 
 	token, err := utils.GenerateJWT(input.Username)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	if err := global.Db.AutoMigrate(&input); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	if err := global.Db.Create(&input).Error; err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
