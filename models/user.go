@@ -31,6 +31,6 @@ import (
 type User struct {
 	//GORM 默认将名为 ID 的字段视为表的主键
 	gorm.Model
-	Uasername string `gorm:"unique"`
-	Password  string // 列名:`password`数据表的列名使用的是 struct 字段名的蛇形命名(Snake Case)
+	Username string `gorm:"unique"`
+	Password string // 列名:`password`数据表的列名使用的是 struct 字段名的蛇形命名(Snake Case)
 }

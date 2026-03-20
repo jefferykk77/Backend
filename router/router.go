@@ -9,6 +9,7 @@ import (
 
 // gin.Engine 是 Gin 框架的核心结构体，负责路由分发、中间件管理和服务启动。
 func SetRouter() *gin.Engine {
+	config.InitDB()
 	config.InitConfig()
 	r := gin.Default()
 
