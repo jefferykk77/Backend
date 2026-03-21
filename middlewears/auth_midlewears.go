@@ -1,18 +1,25 @@
 package middlewears
 
 import (
+	"ExchangeApp/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func AuthMiddleWear() gin.HandlerFunc{
+func AuthMiddleWear() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		token:=ctx.GetHeader("Authorization")
-		if token==""{
-			ctx.JSON(http.StatusUnauthorized,gin.H{"error":"Missing Authorization Header"})
+		token := ctx.GetHeader("Authorization")
+		if token == "" {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization Header"})
 			ctx.Abort()
-			return 
+			return
+		}
+		usename, er := utils.ParseJWT(token)
+		if err != nil {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			ctx.Abort()
+			return
 		}
 	}
 }
