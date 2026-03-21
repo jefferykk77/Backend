@@ -19,7 +19,7 @@ func GenerateJWT(username string) (string, error) {
 		"exp":      time.Now().Add(time.Hour * 72).Unix(),
 	})
 	signedToken, err := token.SignedString([]byte("secret"))
-	return "Bearer" + signedToken, err
+	return "Bearer " + signedToken, err
 }
 
 func CheckPassword(password string, hash string) bool {
@@ -32,7 +32,7 @@ func ParseJWT(tokenString string) (string, error) {
 		tokenString = tokenString[7:]
 	}
 
-	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("Unexpected Signing Method")
 		}

@@ -3,6 +3,7 @@ package router
 import (
 	"ExchangeApp/config"
 	"ExchangeApp/controllers"
+	"ExchangeApp/middlewears"
 
 	"github.com/gin-gonic/gin"
 )
@@ -61,5 +62,12 @@ func SetRouter() *gin.Engine {
 
 			Postman 接收展示：Postman 收到数据，显示状态码 200，并在 Body 区域渲染出 msg 内容。
 	*/
+
+	api := r.Group("/api")
+	api.GET("/exchangeRates", controllers.GetExchangeRates)
+	api.Use(middlewears.AuthMiddleWear())
+	{
+		api.POST("/exchangeRates", controllers.CreateExchangeRate)
+	}
 	return r
 }
