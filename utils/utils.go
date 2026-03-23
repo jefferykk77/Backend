@@ -39,13 +39,14 @@ func ParseJWT(tokenString string) (string, error) {
 			//补充：Go是静态强类型语言，只有接口变量是特殊的，当一个类型实现了接口的所有方法，他的实例可以被赋值到接口变量
 		}
 		return []byte("secret"), nil
+		//有了key之后，结合head和payload，哈希出signature，对比前端传来的signature
 	})
 
 	if err != nil {
 		return "", err
 	}
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid { //Claims静态类型是接口，动态类型是map
 		usernaem, ok := claims["username"].(string)
 		if !ok {
 			return "", errors.New("Username claim is not a string")

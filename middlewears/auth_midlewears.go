@@ -21,7 +21,7 @@ func AuthMiddleWear() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
-		ctx.Set("username", username)
+		ctx.Set("username", username) //ctx.GetString("username") 直接拿到这个名字
 		ctx.Next()
 	}
 }

@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type ExchangeRate struct {
 	ID           uint      `gorm:"primarykey" json :"_id"`
