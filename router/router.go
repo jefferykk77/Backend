@@ -30,7 +30,7 @@ func SetRouter() *gin.Engine {
 		//gin.H (Response): 后端->前端。后端处理完逻辑，将数据封装在 gin.H 中，通过 Response Body 返回。
 		//响应体是 由 gin.H 转换而来的 JSON 数据。
 		//Postman 里的表现：点击 "Send" 后，Postman 底部控制台显示的那个 {"msg": "Login Success"} 就是响应体。
-		auth.POST("/login", controllers.Login) //不传参？？？？？
+		auth.POST("/login", controllers.Login)
 		//Status: 设置 HTTP 状态码。例如 http.StatusOK (200) 表示请求成功。
 		//JSON: 将后方的 gin.H（Map 别名）序列化为 JSON 格式并写入响应体。设置 Content-Type 为 application/json。
 		/*
