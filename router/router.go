@@ -3,13 +3,13 @@ package router
 import (
 	"ExchangeApp/config"
 	"ExchangeApp/controllers"
+	"ExchangeApp/middlewears"
 
 	"github.com/gin-gonic/gin"
 )
 
 // gin.Engine 是 Gin 框架的核心结构体，负责路由分发、中间件管理和服务启动。
 func SetRouter() *gin.Engine {
-	config.InitDB()
 	config.InitConfig()
 	r := gin.Default()
 
@@ -29,7 +29,7 @@ func SetRouter() *gin.Engine {
 		//gin.H (Response): 后端->前端。后端处理完逻辑，将数据封装在 gin.H 中，通过 Response Body 返回。
 		//响应体是 由 gin.H 转换而来的 JSON 数据。
 		//Postman 里的表现：点击 "Send" 后，Postman 底部控制台显示的那个 {"msg": "Login Success"} 就是响应体。
-		auth.POST("/login", controllers.Login) //不传参？？？？？
+		auth.POST("/login", controllers.Login)
 		//Status: 设置 HTTP 状态码。例如 http.StatusOK (200) 表示请求成功。
 		//JSON: 将后方的 gin.H（Map 别名）序列化为 JSON 格式并写入响应体。设置 Content-Type 为 application/json。
 		/*
@@ -61,5 +61,18 @@ func SetRouter() *gin.Engine {
 
 			Postman 接收展示：Postman 收到数据，显示状态码 200，并在 Body 区域渲染出 msg 内容。
 	*/
+
+	api := r.Group("/api")
+	api.GET("/exchangeRates", controllers.GetExchangeRates)
+	api.Use(middlewears.AuthMiddleWear())
+	{
+		api.POST("/exchangeRates", controllers.CreateExchangeRate)
+	}
+
+	api.POST("/createArticle", controllers.CreateArticle)
+	api.GET("/getArticle", controllers.GetArticle)
+	api.GET("/getCtxByID/:id", controllers.GetCtxByID)
+	api.POST("/likeArticle/:id", controllers.LikeArticle)
+	api.GET("/getArticleLikes/:id", controllers.GetArticleLikes)
 	return r
 }
