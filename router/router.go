@@ -10,7 +10,6 @@ import (
 
 // gin.Engine 是 Gin 框架的核心结构体，负责路由分发、中间件管理和服务启动。
 func SetRouter() *gin.Engine {
-	config.InitDB()
 	config.InitConfig()
 	r := gin.Default()
 
@@ -69,5 +68,11 @@ func SetRouter() *gin.Engine {
 	{
 		api.POST("/exchangeRates", controllers.CreateExchangeRate)
 	}
+
+	api.POST("/createArticle", controllers.CreateArticle)
+	api.GET("/getArticle", controllers.GetArticle)
+	api.GET("/getCtxByID/:id", controllers.GetCtxByID)
+	api.POST("/likeArticle/:id", controllers.LikeArticle)
+	api.GET("/getArticleLikes/:id", controllers.GetArticleLikes)
 	return r
 }

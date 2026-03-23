@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis"
 	"gorm.io/gorm"
 )
 
@@ -56,4 +57,29 @@ func GetCtxByID(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, &article)
+}
+
+func LikeArticle(ctx *gin.Context) {
+	id := ctx.Param("id")
+	ArticleLikesKey := "article:" + id + ":likes"
+	if err := global.RedisDB.Incr(ArticleLikesKey).Err(); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"mssage": "successful"})
+}
+
+func GetArticleLikes(ctx *gin.Context) {
+	id := ctx.Param("id")
+	ArticleLikeKey := "article:" + id + ":likes"
+	likes, err := global.RedisDB.Get(ArticleLikeKey).Result() //Redis `GET key` command. It returns redis.Nil error when key does not exist.
+	if err == redis.Nil {
+		likes = "0"
+		return
+	} else if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	} else {
+		ctx.JSON(http.StatusOK, gin.H{"likes": likes})
+	}
 }
